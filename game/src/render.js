@@ -39,7 +39,7 @@ export function cardElement(card, index, state, onSelect) {
     <div class="key">${index + 1}</div>
     ${bonus ? `<div class="synergy">+${bonus} SYNERGY</div>` : ''}
     <div class="name">${card.name}</div>
-    <div class="glyph suit-${card.suit}" style="color:${suit.color}">${suit.shape}</div>
+    <div class="art suit-${card.suit}"><span class="art-glyph" style="color:#fff">${suit.shape}</span></div>
     <div class="effect">${card.text}</div>
     <div class="type">${suit.name} · ${card.kind}</div>
     <div class="value">${card.value}${bonus ? ` +${bonus}` : ''}</div>`;
@@ -51,13 +51,42 @@ export function cardElement(card, index, state, onSelect) {
 export function miniCardElement(card) {
   const suit = SUITS[card.suit];
   const el = document.createElement('div');
-  el.className = 'mini-card';
+  el.className = `mini-card suit-${card.suit}`;
   el.innerHTML = `
+    <div class="mc-art">${suit.shape}</div>
     <div class="mc-cost">${card.cost}</div>
-    <div class="mc-suit" style="color:${suit.color}">${suit.shape}</div>
     <div class="mc-name">${card.name}</div>
     <div class="mc-val" style="color:${suit.color}">${card.value}</div>
     <div class="mc-type">${suit.name} · ${card.kind}</div>`;
+  return el;
+}
+
+/** One small face for the clash display: art panel, name and value. */
+function clashCardElement(card, owner, latest) {
+  const suit = SUITS[card.suit];
+  const el = document.createElement('div');
+  el.className = 'clash-side';
+  el.innerHTML = `
+    <div class="clash-card suit-${card.suit}${latest ? ' latest' : ''}">
+      <div class="cc-art"><span>${suit.shape}</span></div>
+      <div class="cc-name">${card.name}</div>
+      <div class="cc-val" style="color:${suit.color}">${card.value}</div>
+    </div>
+    <div class="clash-label">${owner}</div>`;
+  return el;
+}
+
+/** A face-down placeholder for a side that has not played a card yet. */
+function clashBackElement(owner) {
+  const el = document.createElement('div');
+  el.className = 'clash-side';
+  el.innerHTML = `
+    <div class="clash-card card-back">
+      <div class="cc-art"><span>?</span></div>
+      <div class="cc-name">Awaiting a play…</div>
+      <div class="cc-val">&nbsp;</div>
+    </div>
+    <div class="clash-label">${owner}</div>`;
   return el;
 }
 
@@ -65,24 +94,43 @@ function renderSpotlight(state) {
   const spot = $('spotlight');
   spot.innerHTML = '';
   const last = state.lastPlayed;
-  if (!last) {
-    const hint = document.createElement('div');
-    hint.className = 'spot-text';
-    hint.innerHTML = state.phase === PHASE_TITLE
-      ? 'Welcome to the <b>Ember Court</b> — press Enter or <b>Enter the Court</b> to begin.'
-      : 'Play a card from your hand. Two cards of the same suit in one turn empower the second (+2).';
-    spot.appendChild(hint);
+  // The clash is the most recent exchange: each side's last card in its discard pile.
+  const youLast = state.you.discard[state.you.discard.length - 1] || null;
+  const foeLast = state.foe.discard[state.foe.discard.length - 1] || null;
+  if (!youLast && !foeLast) {
+    // Nothing played yet: the court emblem and the round's flavour line.
+    const wrap = document.createElement('div');
+    wrap.className = 'emblem-wrap';
+    wrap.innerHTML = `
+      <div class="emblem-glyphs">
+        <span class="suit-ember">▲</span><span class="suit-tide">●</span><span class="suit-thorn">◆</span><span class="suit-gale">★</span>
+      </div>
+      <div class="emblem-line">${state.phase === PHASE_TITLE
+        ? 'Welcome to the <b>Ember Court</b> — press Enter or <b>Enter the Court</b> to begin.'
+        : `Round <b>${state.round}</b> — the court watches. Play a card to open the duel.`}</div>`;
+    spot.appendChild(wrap);
     return;
   }
-  const suit = SUITS[last.card.suit];
-  const text = document.createElement('div');
-  text.className = 'spot-text';
-  if (last.ready) {
-    text.innerHTML = last.line;
-  } else {
-    text.innerHTML = `<b>${last.who === 'you' ? 'You' : 'Vex'}</b> played <b>${last.card.name}</b> <span style="color:${suit.color}">${suit.shape} ${suit.name}</span> — ${last.line}`;
+  const wrap = document.createElement('div');
+  wrap.className = 'clash-wrap';
+  const row = document.createElement('div');
+  row.className = 'clash-row';
+  const latestWho = last ? last.who : null;
+  row.appendChild(youLast ? clashCardElement(youLast, 'You', latestWho === 'you') : clashBackElement('You'));
+  const vs = document.createElement('div');
+  vs.className = 'vs-badge';
+  vs.textContent = 'VS';
+  row.appendChild(vs);
+  row.appendChild(foeLast ? clashCardElement(foeLast, 'Vex', latestWho === 'foe') : clashBackElement('Vex'));
+  wrap.appendChild(row);
+  if (last) {
+    const caption = document.createElement('div');
+    caption.className = 'clash-caption';
+    // last.line already reads "You/Vex played <card> — <effect>"; use it as-is.
+    caption.innerHTML = last.line;
+    wrap.appendChild(caption);
   }
-  spot.appendChild(text);
+  spot.appendChild(wrap);
 }
 
 function renderLog(state) {
