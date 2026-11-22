@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ember Court — a dueling card battler</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div id="stage">
+  <div id="table">
+    <header id="topbar">
+      <div class="brand">EMBER COURT</div>
+      <div class="top-mid">
+        <span id="roundLabel">Round 1</span>
+        <span class="sep">·</span>
+        <span id="scoreLabel">Score 0</span>
+        <span class="sep">·</span>
+        <span id="winsLabel">Wins 0</span>
+      </div>
+      <div class="top-right">
+        <button id="soundBtn" class="mini-btn" type="button" title="Toggle sound (M)">Sound: On</button>
+        <button id="restartBtn" class="mini-btn" type="button" title="Restart (R)">Restart</button>
+      </div>
+    </header>
+
+    <section id="foeZone" aria-label="Opponent">
+      <div class="portrait foe-portrait" title="Warden Vex, Keeper of the Ember Court">V</div>
+      <div class="side-info">
+        <div class="side-name">Warden Vex <span class="side-tag">AI Opponent</span></div>
+        <div class="hp-row">
+          <div class="hp-bar"><div id="foeHpFill" class="hp-fill foe"></div><span id="foeHpText" class="hp-text">30 / 30</span></div>
+          <span id="foeBlock" class="block-badge" hidden>🛡 0</span>
+        </div>
+        <div class="energy-row" id="foeEnergy" aria-label="Opponent energy"></div>
+      </div>
+      <div id="foeHand" class="mini-hand" aria-label="Opponent hand"></div>
+    </section>
+
+    <section id="midZone">
+      <div id="spotlight" aria-label="Last played card"></div>
+      <div id="logPanel">
+        <div class="log-title">Court Log</div>
+        <ul id="logList"></ul>
+      </div>
+    </section>
+
+    <section id="youZone" aria-label="Your side">
+      <div class="portrait you-portrait" title="You, Challenger of the Court">You</div>
+      <div class="side-info">
+        <div class="side-name">You <span class="side-tag">Challenger</span></div>
+        <div class="hp-row">
+          <div class="hp-bar"><div id="youHpFill" class="hp-fill you"></div><span id="youHpText" class="hp-text">30 / 30</span></div>
+          <span id="youBlock" class="block-badge" hidden>🛡 0</span>
+        </div>
+        <div class="energy-row" id="youEnergy" aria-label="Your energy"></div>
+        <div class="deck-row"><span id="youDeck">Deck 16</span><span class="sep">·</span><span id="youDiscard">Discard 0</span></div>
+      </div>
+      <button id="endTurnBtn" class="end-turn" type="button" title="End turn (Space or E)">End Turn</button>
+    </section>
+
+    <section id="handZone" aria-label="Your hand">
+      <div id="hand"></div>
+      <div id="handHint">Click a card to select it — click again to play it. Keys 1–7 select, Space ends your turn.</div>
+    </section>
+
+    <div id="banner" class="banner" hidden></div>
+
+    <div id="titleScreen" class="overlay">
+      <div class="panel title-panel">
+        <div class="game-title">EMBER COURT</div>
+        <div class="game-sub">A dueling card battler</div>
+        <div class="howto">
+          <p><b>Goal:</b> reduce Warden Vex to 0 HP before yours reaches 0. Both start at 30 HP.</p>
+          <p><b>Each turn:</b> gain energy, draw a card, then play cards from your hand. A card costs energy — spend it wisely.</p>
+          <p><b>Suits:</b> <span class="suit-ember">▲ Ember</span> hits hard · <span class="suit-tide">● Tide</span> heals &amp; shields · <span class="suit-thorn">◆ Thorn</span> guards &amp; snares · <span class="suit-gale">★ Gale</span> strikes fast &amp; draws.</p>
+          <p><b>Synergy:</b> play two cards of the same suit in one turn and the second one is empowered (+2).</p>
+          <p><b>Controls:</b> mouse to select &amp; play cards · <b>Enter</b> start · <b>Space / E</b> end turn · <b>1–7</b> select card · <b>R</b> restart · <b>M</b> sound.</p>
+        </div>
+        <button id="startBtn" class="big-btn" type="button">Enter the Court</button>
+        <div class="press-enter">or press Enter</div>
+      </div>
+    </div>
+
+    <div id="endScreen" class="overlay" hidden>
+      <div class="panel end-panel">
+        <div id="endTitle" class="end-title"></div>
+        <div id="endSub" class="end-sub"></div>
+        <div id="endStats" class="end-stats"></div>
+        <button id="againBtn" class="big-btn" type="button">Play Again</button>
+        <div class="press-enter">or press R</div>
+      </div>
+    </div>
+  </div>
+</div>
+<p id="status" role="status" aria-live="polite"></p>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
