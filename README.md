@@ -15,6 +15,31 @@ A turn-based dueling card battler. You are the Challenger of the Ember Court —
 - **The AI** reads the table: it presses its advantage when you are low, guards and heals when it is hurt, and draws when its hand runs thin.
 - **Score** grows with every point of damage you deal; winning a match pays +100.
 
+## What you see
+
+- **The table:** your hand fanned along the bottom, Warden Vex across from you with his hand face-down (backs only — the count is public, the cards are not), and the clash in the middle: your last card against Vex's, with a gold VS between them.
+- **The arena rail:** a synergy meter (four suit pips that light up for suits already played this turn) over the last three exchanges, e.g. "You: Ember Slash 4 — Vex: Tide Mend 4".
+- **Visible piles:** your deck and discard sit as stacked card backs beside your portrait, with counts; Vex's piles sit beside his.
+- **Every card has its own art:** a distinct glyph in a tall art panel — ✕ Slash, ❖ Burst, ✹ Inferno, ✚ Mend, ◈ Shield, ≈ Wave, ▦ Wall, ✜ Snare, ➤ Pierce, ➶ Dart, » Rush, ✦ Tempest — with the suit shape kept small in the top-right corner.
+- **Title and end screens are banners, not walls:** the title is a compact panel docked high over a bright dealt board, and victory or defeat arrives as a gold or red ribbon across the top while the final board stays visible underneath.
+
+## The cards
+
+| Card | Suit | Cost | Effect |
+| --- | --- | --- | --- |
+| Ember Slash | Ember | 1 | Deal 4 damage. |
+| Ember Burst | Ember | 2 | Deal 7 damage. |
+| Ember Inferno | Ember | 3 | Deal 10 damage. |
+| Tide Mend | Tide | 1 | Restore 4 HP. |
+| Tide Shield | Tide | 2 | Gain 8 block. |
+| Tide Wave | Tide | 3 | Deal 8 damage. |
+| Thorn Wall | Thorn | 1 | Gain 5 block. |
+| Thorn Snare | Thorn | 2 | Deal 4 damage and gain 3 block. |
+| Thorn Pierce | Thorn | 1 | Deal 3 damage. Gain 2 block. |
+| Gale Dart | Gale | 1 | Deal 3 damage. |
+| Gale Rush | Gale | 2 | Draw 2 cards. |
+| Gale Tempest | Gale | 3 | Deal 6 damage. Draw 1 card. |
+
 ## Controls
 
 - Mouse: click a card to select it, click again to play it.
@@ -36,6 +61,8 @@ No build step, no network requests — `game/` is plain static files. Screenshot
 - `game/index.html` — the table
 - `game/styles.css` — table, cards and overlays
 - `game/src/cards.js` — the four suits and the 12-card catalogue
+- `game/src/art.js` — the per-card art glyphs
+- `game/src/arena.js` — synergy meter, history strip, deck/discard piles, foe card backs
 - `game/src/state.js` — rules, turns and the AI opponent
 - `game/src/render.js` — DOM rendering of the table and hands
 - `game/src/audio.js` — synthesized WebAudio sound effects

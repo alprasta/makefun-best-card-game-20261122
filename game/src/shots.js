@@ -2,8 +2,8 @@
 // Each scene plays the real rules forward from a fresh seeded match with a small
 // autopilot, so the frame is what a real game looks like and the same seed always
 // gives the same frame. No scene edits the rules or fakes a state by hand.
-import { newMatch, startMatch, playCard, endPlayerTurn, beginPlayerRound, aiStep, drawCards, PHASE_OVER } from './state.js';
-import { CARD_DEFS, makeRng, SUITS } from './cards.js';
+import { newMatch, startMatch, playCard, endPlayerTurn, beginPlayerRound, aiStep, PHASE_OVER, PHASE_TITLE } from './state.js';
+import { CARD_DEFS, SUITS } from './cards.js';
 
 const MAX_STEPS = 400;
 
@@ -49,15 +49,32 @@ function playRound(state, playerPlays) {
   beginPlayerRound(state);
 }
 
+/** Draw up to `target` hand size, but only from the deck as it stands — never
+ *  reshuffle the discard, which would erase the clash display. */
+function topUpHand(side, target) {
+  while (side.hand.length < target && side.deck.length > 0) {
+    side.hand.push(side.deck.pop());
+  }
+}
+
 /** A fixed attractive mid-game table: round 3, both sides hurt, hands full. */
 function stagePlay(state) {
   startMatch(state);
   playRound(state, true);
   playRound(state, true);
   if (state.phase === PHASE_OVER) return;
-  // Top both hands up so the table reads full: two fresh cards each.
-  drawCards(state.you, 2, makeRng(state.seed + 101));
-  drawCards(state.foe, 2, makeRng(state.seed + 103));
+  // Open the current turn with one real play, so the synergy meter shows a
+  // suit already played this turn and the clash shows a live exchange.
+  const open = state.you.hand.findIndex((card) => card.cost <= state.you.energy);
+  if (open >= 0) {
+    const card = state.you.hand[open];
+    const line = playCard(state, 'you', open);
+    state.lastPlayed = { card, who: 'you', line };
+    if (state.phase === PHASE_OVER) return;
+  }
+  // Six cards in hand (HAND_LIMIT is 7, so this is legal), five backs for Vex.
+  topUpHand(state.you, 6);
+  topUpHand(state.foe, 5);
   // Leave one card selected, as if the player is about to play it.
   const playable = state.you.hand.findIndex((card) => card.cost <= state.you.energy);
   state.selected = playable >= 0 ? playable : 0;
@@ -80,6 +97,9 @@ function stageWin(state) {
     if (state.phase === PHASE_OVER) break;
     beginPlayerRound(state);
   }
+  // End state keeps a fanned hand and the deciding exchange in the clash.
+  topUpHand(state.you, 5);
+  topUpHand(state.foe, 5);
 }
 
 /** The player loses: it fights one round, then stalls, and the AI grinds it down. */
@@ -92,6 +112,9 @@ function stageLoss(state) {
     if (state.phase === PHASE_OVER) break;
     beginPlayerRound(state);
   }
+  // End state keeps a fanned hand and the deciding exchange in the clash.
+  topUpHand(state.you, 5);
+  topUpHand(state.foe, 5);
 }
 
 /**
@@ -105,6 +128,11 @@ export function stageShot(name, seed) {
   if (name === 'play') stagePlay(state);
   else if (name === 'win') stageWin(state);
   else if (name === 'loss') stageLoss(state);
+  else {
+    // Start: a real dealt opening state behind the compact title panel.
+    startMatch(state);
+    state.phase = PHASE_TITLE;
+  }
   return state;
 }
 

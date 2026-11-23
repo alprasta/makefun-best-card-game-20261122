@@ -36,9 +36,11 @@
         <div class="energy-row" id="foeEnergy" aria-label="Opponent energy"></div>
       </div>
       <div id="foeHand" class="mini-hand" aria-label="Opponent hand"></div>
+      <div id="foePiles" class="piles-slot" aria-label="Opponent deck and discard"></div>
     </section>
 
     <section id="midZone">
+      <div id="arenaRail" aria-label="Synergy and recent exchanges"></div>
       <div id="spotlight" aria-label="Last played card"></div>
       <div id="logPanel">
         <div class="log-title">Court Log</div>
@@ -55,8 +57,8 @@
           <span id="youBlock" class="block-badge" hidden>🛡 0</span>
         </div>
         <div class="energy-row" id="youEnergy" aria-label="Your energy"></div>
-        <div class="deck-row"><span id="youDeck">Deck 16</span><span class="sep">·</span><span id="youDiscard">Discard 0</span></div>
       </div>
+      <div id="youPiles" class="piles-slot" aria-label="Your deck and discard"></div>
       <button id="endTurnBtn" class="end-turn" type="button" title="End turn (Space or E)">End Turn</button>
     </section>
 
@@ -78,18 +80,15 @@
           <span class="chip chip-gale">★ Gale · strikes fast &amp; draws</span>
         </div>
         <div class="howto">
-          <p><b>Goal:</b> reduce Warden Vex to 0 HP before yours reaches 0. Both start at 30 HP.</p>
-          <p><b>Each turn:</b> gain energy, draw a card, then play cards from your hand. A card costs energy — spend it wisely.</p>
-          <p><b>Synergy:</b> play two cards of the same suit in one turn and the second one is empowered (+2).</p>
-          <p><b>Controls:</b> click to select, click again to play · <b>Enter</b> start · <b>Space / E</b> end turn · <b>1–7</b> select · <b>R</b> restart · <b>M</b> sound.</p>
+          <p>Reduce Warden Vex to 0 HP. Play two of a suit in a turn and the second is +2 (Synergy). Full rules in the README.</p>
         </div>
         <button id="startBtn" class="big-btn" type="button">Enter the Court</button>
         <div class="press-enter">or press Enter</div>
       </div>
     </div>
 
-    <div id="endScreen" class="overlay" hidden>
-      <div class="panel end-panel">
+    <div id="endScreen" class="end-banner" hidden>
+      <div class="end-banner-inner">
         <div id="endTitle" class="end-title"></div>
         <div id="endSub" class="end-sub"></div>
         <div id="endStats" class="end-stats"></div>

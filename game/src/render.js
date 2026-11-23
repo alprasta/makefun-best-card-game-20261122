@@ -1,7 +1,9 @@
-// DOM rendering for Ember Court: builds the table, the hands and the overlays
+// DOM rendering for Ember Court: builds the table, the hands and the banners
 // from the match state, and keeps every number on screen in sync with it.
 import { SUITS } from './cards.js';
 import { PHASE_TITLE, PHASE_OVER, synergyBonus } from './state.js';
+import { artFor } from './art.js';
+import { foeBacksElement, synergyMeterElement, historyStripElement, pilesElement } from './arena.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -39,7 +41,7 @@ export function cardElement(card, index, state, onSelect) {
     <div class="key">${index + 1}</div>
     ${bonus ? `<div class="synergy">+${bonus} SYNERGY</div>` : ''}
     <div class="name">${card.name}</div>
-    <div class="art suit-${card.suit}"><span class="art-glyph" style="color:#fff">${suit.shape}</span></div>
+    <div class="art suit-${card.suit}"><span class="art-glyph" style="color:#fff">${artFor(card)}</span></div>
     <div class="effect">${card.text}</div>
     <div class="type">${suit.name} · ${card.kind}</div>
     <div class="value">${card.value}${bonus ? ` +${bonus}` : ''}</div>`;
@@ -47,28 +49,14 @@ export function cardElement(card, index, state, onSelect) {
   return el;
 }
 
-/** One small card element for the opponent's visible hand. */
-export function miniCardElement(card) {
-  const suit = SUITS[card.suit];
-  const el = document.createElement('div');
-  el.className = `mini-card suit-${card.suit}`;
-  el.innerHTML = `
-    <div class="mc-art">${suit.shape}</div>
-    <div class="mc-cost">${card.cost}</div>
-    <div class="mc-name">${card.name}</div>
-    <div class="mc-val" style="color:${suit.color}">${card.value}</div>
-    <div class="mc-type">${suit.name} · ${card.kind}</div>`;
-  return el;
-}
-
-/** One small face for the clash display: art panel, name and value. */
+/** One small card element for the clash display: art panel, name and value. */
 function clashCardElement(card, owner, latest) {
   const suit = SUITS[card.suit];
   const el = document.createElement('div');
   el.className = 'clash-side';
   el.innerHTML = `
     <div class="clash-card suit-${card.suit}${latest ? ' latest' : ''}">
-      <div class="cc-art"><span>${suit.shape}</span></div>
+      <div class="cc-art"><span>${artFor(card)}</span></div>
       <div class="cc-name">${card.name}</div>
       <div class="cc-val" style="color:${suit.color}">${card.value}</div>
     </div>
@@ -143,10 +131,19 @@ function renderLog(state) {
   }
 }
 
+/** The arena rail: synergy meter + last-exchanges strip, flanking the clash. */
+function renderArenaRail(state) {
+  const rail = $('arenaRail');
+  rail.innerHTML = '';
+  rail.appendChild(synergyMeterElement(state.you.playedSuits));
+  rail.appendChild(historyStripElement(state.you.discard, state.foe.discard));
+}
+
 function renderEndScreen(state) {
   const screen = $('endScreen');
   if (state.phase !== PHASE_OVER) { screen.hidden = true; return; }
   const win = state.winner === 'you';
+  screen.className = `end-banner ${win ? 'win' : 'lose'}`;
   const title = $('endTitle');
   title.textContent = win ? 'VICTORY' : 'DEFEAT';
   title.className = `end-title ${win ? 'win' : 'lose'}`;
@@ -174,12 +171,18 @@ export function render(state, callbacks) {
   blockBadge($('youBlock'), state.you);
   energyPips($('foeEnergy'), state.foe);
   energyPips($('youEnergy'), state.you);
-  $('youDeck').textContent = `Deck ${state.you.deck.length}`;
-  $('youDiscard').textContent = `Discard ${state.you.discard.length}`;
 
+  const foePiles = $('foePiles');
+  foePiles.innerHTML = '';
+  foePiles.appendChild(pilesElement(state.foe.deck.length, state.foe.discard.length));
+  const youPiles = $('youPiles');
+  youPiles.innerHTML = '';
+  youPiles.appendChild(pilesElement(state.you.deck.length, state.you.discard.length));
+
+  // Vex's hand is face-down backs — the count is public, the cards are not.
   const foeHand = $('foeHand');
   foeHand.innerHTML = '';
-  for (const card of state.foe.hand) foeHand.appendChild(miniCardElement(card));
+  foeHand.appendChild(foeBacksElement(state.foe.hand.length));
 
   const hand = $('hand');
   hand.innerHTML = '';
@@ -191,6 +194,7 @@ export function render(state, callbacks) {
   $('titleScreen').hidden = state.phase !== PHASE_TITLE;
 
   renderSpotlight(state);
+  renderArenaRail(state);
   renderLog(state);
   renderEndScreen(state);
 }

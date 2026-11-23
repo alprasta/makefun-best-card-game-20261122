@@ -9,18 +9,18 @@ export const SUITS = {
 };
 
 export const CARD_DEFS = [
-  { id: 'ember-slash', name: 'Ember Slash', suit: 'ember', cost: 1, kind: 'attack', value: 4, text: 'Deal 4 damage.' },
-  { id: 'ember-burst', name: 'Ember Burst', suit: 'ember', cost: 2, kind: 'attack', value: 7, text: 'Deal 7 damage.' },
-  { id: 'ember-inferno', name: 'Ember Inferno', suit: 'ember', cost: 3, kind: 'attack', value: 10, text: 'Deal 10 damage.' },
-  { id: 'tide-mend', name: 'Tide Mend', suit: 'tide', cost: 1, kind: 'heal', value: 4, text: 'Restore 4 HP.' },
-  { id: 'tide-shield', name: 'Tide Shield', suit: 'tide', cost: 2, kind: 'guard', value: 8, text: 'Gain 8 block.' },
-  { id: 'tide-wave', name: 'Tide Wave', suit: 'tide', cost: 3, kind: 'attack', value: 8, text: 'Deal 8 damage.' },
-  { id: 'thorn-wall', name: 'Thorn Wall', suit: 'thorn', cost: 1, kind: 'guard', value: 5, text: 'Gain 5 block.' },
-  { id: 'thorn-snare', name: 'Thorn Snare', suit: 'thorn', cost: 2, kind: 'hybrid', value: 4, block: 3, text: 'Deal 4 damage and gain 3 block.' },
-  { id: 'thorn-pierce', name: 'Thorn Pierce', suit: 'thorn', cost: 1, kind: 'hybrid', value: 3, block: 2, text: 'Deal 3 damage. Gain 2 block.' },
-  { id: 'gale-dart', name: 'Gale Dart', suit: 'gale', cost: 1, kind: 'attack', value: 3, text: 'Deal 3 damage.' },
-  { id: 'gale-rush', name: 'Gale Rush', suit: 'gale', cost: 2, kind: 'draw', value: 2, text: 'Draw 2 cards.' },
-  { id: 'gale-tempest', name: 'Gale Tempest', suit: 'gale', cost: 3, kind: 'hybrid', value: 6, draw: 1, text: 'Deal 6 damage. Draw 1 card.' },
+  { id: 'ember-slash', art: '✕', name: 'Ember Slash', suit: 'ember', cost: 1, kind: 'attack', value: 4, text: 'Deal 4 damage.' },
+  { id: 'ember-burst', art: '❖', name: 'Ember Burst', suit: 'ember', cost: 2, kind: 'attack', value: 7, text: 'Deal 7 damage.' },
+  { id: 'ember-inferno', art: '✹', name: 'Ember Inferno', suit: 'ember', cost: 3, kind: 'attack', value: 10, text: 'Deal 10 damage.' },
+  { id: 'tide-mend', art: '✚', name: 'Tide Mend', suit: 'tide', cost: 1, kind: 'heal', value: 4, text: 'Restore 4 HP.' },
+  { id: 'tide-shield', art: '◈', name: 'Tide Shield', suit: 'tide', cost: 2, kind: 'guard', value: 8, text: 'Gain 8 block.' },
+  { id: 'tide-wave', art: '≈', name: 'Tide Wave', suit: 'tide', cost: 3, kind: 'attack', value: 8, text: 'Deal 8 damage.' },
+  { id: 'thorn-wall', art: '▦', name: 'Thorn Wall', suit: 'thorn', cost: 1, kind: 'guard', value: 5, text: 'Gain 5 block.' },
+  { id: 'thorn-snare', art: '⊗', name: 'Thorn Snare', suit: 'thorn', cost: 2, kind: 'hybrid', value: 4, block: 3, text: 'Deal 4 damage and gain 3 block.' },
+  { id: 'thorn-pierce', art: '➤', name: 'Thorn Pierce', suit: 'thorn', cost: 1, kind: 'hybrid', value: 3, block: 2, text: 'Deal 3 damage. Gain 2 block.' },
+  { id: 'gale-dart', art: '➶', name: 'Gale Dart', suit: 'gale', cost: 1, kind: 'attack', value: 3, text: 'Deal 3 damage.' },
+  { id: 'gale-rush', art: '»', name: 'Gale Rush', suit: 'gale', cost: 2, kind: 'draw', value: 2, text: 'Draw 2 cards.' },
+  { id: 'gale-tempest', art: '✦', name: 'Gale Tempest', suit: 'gale', cost: 3, kind: 'hybrid', value: 6, draw: 1, text: 'Deal 6 damage. Draw 1 card.' },
 ];
 
 export const DECK_SIZE = 24;

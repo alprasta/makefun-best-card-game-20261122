@@ -15,7 +15,7 @@ body { font-family: Georgia, 'Times New Roman', serif; color: #f2e8d5; }
 #status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* ---------- top bar ---------- */
-#topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px 6px; }
+#topbar { display: flex; align-items: center; justify-content: space-between; padding: 6px 18px 4px; }
 .brand { font-size: 22px; font-weight: bold; letter-spacing: 4px; color: #f5c542; text-shadow: 0 2px 0 #5a3d1e, 0 0 18px rgba(245, 197, 66, 0.35); }
 .top-mid { font-size: 17px; color: #e8dcc0; }
 .top-mid .sep { margin: 0 8px; color: #c9a227; }
@@ -53,8 +53,16 @@ body { font-family: Georgia, 'Times New Roman', serif; color: #f2e8d5; }
 .energy-row { display: flex; gap: 5px; margin-top: 5px; min-height: 14px; }
 .energy-pip { width: 22px; height: 12px; border-radius: 6px; background: #22304a; border: 1px solid #56708f; }
 .energy-pip.full { background: linear-gradient(180deg, #ffd76a, #e8a91c); border-color: #ffe9a8; box-shadow: 0 0 8px rgba(255, 200, 60, 0.5); }
-.deck-row { font-size: 13px; color: #cbbd97; margin-top: 4px; }
-.deck-row .sep { margin: 0 6px; }
+/* ---------- opponent face-down hand ---------- */
+.foe-backs { display: flex; align-items: center; gap: 8px; }
+.foe-backs .mini-card.card-back {
+  width: 46px; height: 66px; padding: 0;
+  background: linear-gradient(160deg, #2a3550, #141a28);
+  border: 2px solid #c9a227; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.foe-backs .mc-back-glyph { font-size: 20px; color: #c9a227; text-shadow: 0 0 8px rgba(201, 162, 39, 0.6); }
+.foe-backs-label { font-size: 13px; color: #cbbd97; white-space: nowrap; }
 
 /* ---------- opponent mini hand ---------- */
 .mini-hand { display: flex; gap: 6px; align-items: center; }
@@ -86,7 +94,54 @@ body { font-family: Georgia, 'Times New Roman', serif; color: #f2e8d5; }
 .mini-card .mc-type { font-size: 8px; text-align: center; color: #5a4a22; text-transform: uppercase; letter-spacing: 0.5px; }
 
 /* ---------- middle zone ---------- */
-#midZone { display: flex; gap: 16px; padding: 6px 18px 2px; height: 154px; }
+#midZone { display: flex; gap: 14px; padding: 6px 18px 2px; height: 208px; }
+
+/* Arena rail: synergy meter over the last-exchanges strip, flanking the clash. */
+#arenaRail { width: 300px; flex: none; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+.synergy-meter, .history-strip {
+  background: rgba(6, 10, 7, 0.72); border: 1px solid rgba(201, 162, 39, 0.65);
+  border-radius: 10px; padding: 8px 12px; box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+.synergy-title, .history-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #c9a227; margin-bottom: 6px; }
+.synergy-pips { display: flex; gap: 10px; }
+.synergy-pip {
+  width: 30px; height: 30px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; border: 2px solid; background: rgba(0, 0, 0, 0.4); opacity: 0.4;
+}
+.synergy-pip.suit-ember { color: #ff8a5c; border-color: #c73e1d; }
+.synergy-pip.suit-tide { color: #7cc0ff; border-color: #1d6fb8; }
+.synergy-pip.suit-thorn { color: #8fdd7f; border-color: #2e7d32; }
+.synergy-pip.suit-gale { color: #ffd94d; border-color: #b8860b; }
+.synergy-pip.lit { opacity: 1; box-shadow: 0 0 12px rgba(255, 215, 106, 0.7); }
+.synergy-pip.suit-ember.lit { background: rgba(199, 62, 29, 0.5); }
+.synergy-pip.suit-tide.lit { background: rgba(29, 111, 184, 0.5); }
+.synergy-pip.suit-thorn.lit { background: rgba(46, 125, 50, 0.5); }
+.synergy-pip.suit-gale.lit { background: rgba(184, 134, 11, 0.5); }
+.history-chip {
+  font-size: 13px; color: #e8dcc0; padding: 3px 8px; margin-top: 4px; border-radius: 6px;
+  border-left: 3px solid #c9a227; background: rgba(255, 255, 255, 0.06);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.history-chip.suit-ember { border-left-color: #c73e1d; }
+.history-chip.suit-tide { border-left-color: #1d6fb8; }
+.history-chip.suit-thorn { border-left-color: #2e7d32; }
+.history-chip.suit-gale { border-left-color: #b8860b; }
+.history-empty { font-size: 13px; font-style: italic; color: #bfae87; }
+
+/* Visible deck / discard piles: stacked card backs with counts. */
+.piles-slot { display: flex; align-items: center; flex: none; }
+.piles { display: flex; gap: 12px; }
+.pile { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.pile-stack { position: relative; width: 52px; height: 66px; }
+.pile-card {
+  position: absolute; width: 46px; height: 62px; border-radius: 6px;
+  background: linear-gradient(160deg, #2a3550, #141a28); border: 2px solid #c9a227;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+}
+.pile-card-a { left: 0; top: 4px; }
+.pile-card-b { left: 3px; top: 2px; }
+.pile-card-c { left: 6px; top: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #c9a227; }
+.pile-counts { font-size: 12px; color: #cbbd97; white-space: nowrap; }
 #spotlight { flex: 1; display: flex; align-items: center; justify-content: center; gap: 12px; min-width: 0; }
 .spot-text { font-size: 18px; color: #e8dcc0; text-align: center; max-width: 560px; line-height: 1.35; }
 .spot-text b { color: #ffd76a; }
@@ -96,7 +151,7 @@ body { font-family: Georgia, 'Times New Roman', serif; color: #f2e8d5; }
 .clash-row { display: flex; align-items: center; gap: 14px; }
 .clash-side { display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .clash-card {
-  width: 96px; height: 118px; border-radius: 9px; position: relative; flex: none;
+  width: 130px; height: 150px; border-radius: 9px; position: relative; flex: none;
   background: linear-gradient(165deg, #fdf6e0, #e6d5a8 60%, #d3bd85);
   border: 3px solid #8a6d2f; color: #241a08; padding: 5px 6px;
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.55); overflow: hidden;
@@ -109,24 +164,24 @@ body { font-family: Georgia, 'Times New Roman', serif; color: #f2e8d5; }
 .clash-card.suit-ember.latest, .clash-card.suit-tide.latest,
 .clash-card.suit-thorn.latest, .clash-card.suit-gale.latest { border-color: #ffd76a; }
 .clash-card .cc-art {
-  height: 46px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
-  font-size: 30px; color: #fff; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
+  height: 64px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-size: 40px; color: #fff; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
   border: 2px solid rgba(255, 255, 255, 0.4); box-shadow: inset 0 -3px 8px rgba(0, 0, 0, 0.3);
 }
 .clash-card.suit-ember .cc-art { background: linear-gradient(160deg, #ff7a3c, #c22a08 60%, #8f1500); }
 .clash-card.suit-tide .cc-art { background: linear-gradient(160deg, #4db2ff, #0f5cb8 60%, #0a3a7a); }
 .clash-card.suit-thorn .cc-art { background: linear-gradient(160deg, #7ed957, #1e7d31 60%, #145c22); }
 .clash-card.suit-gale .cc-art { background: linear-gradient(160deg, #ffd94d, #c07f00 60%, #8a5c00); }
-.clash-card .cc-name { font-size: 11px; font-weight: bold; text-align: center; line-height: 1.15; margin-top: 4px; min-height: 26px; }
-.clash-card .cc-val { text-align: center; font-size: 20px; font-weight: bold; }
+.clash-card .cc-name { font-size: 12px; font-weight: bold; text-align: center; line-height: 1.15; margin-top: 4px; min-height: 28px; }
+.clash-card .cc-val { text-align: center; font-size: 24px; font-weight: bold; }
 .clash-card.card-back { background: linear-gradient(160deg, #2a3550, #141a28); border-color: #c9a227; }
 .clash-card.card-back .cc-art { background: radial-gradient(circle at 50% 40%, #3a4a6e, #1a2233); color: #c9a227; border-color: rgba(201, 162, 39, 0.5); }
 .clash-card.card-back .cc-name { color: #bfae87; font-weight: normal; font-style: italic; }
 .clash-label { font-size: 11px; font-weight: bold; letter-spacing: 2px; color: #cbbd97; text-transform: uppercase; }
 .vs-badge {
-  width: 46px; height: 46px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+  width: 56px; height: 56px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
   background: radial-gradient(circle at 35% 30%, #ffe9a8, #e8a91c 60%, #a86e00);
-  border: 3px solid #fff3d0; color: #3a2503; font-size: 18px; font-weight: bold; letter-spacing: 1px;
+  border: 3px solid #fff3d0; color: #3a2503; font-size: 22px; font-weight: bold; letter-spacing: 1px;
   box-shadow: 0 0 18px rgba(255, 200, 60, 0.6), 0 4px 10px rgba(0, 0, 0, 0.6);
 }
 .clash-caption { font-size: 14px; color: #ddd2b4; text-align: center; max-width: 620px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -163,7 +218,7 @@ body { font-family: Georgia, 'Times New Roman', serif; color: #f2e8d5; }
 #handHint { text-align: center; font-size: 13px; color: #bfae87; margin-top: 6px; }
 
 .card {
-  width: 148px; height: 212px; border-radius: 12px; position: relative; flex: none; cursor: pointer;
+  width: 148px; height: 200px; border-radius: 12px; position: relative; flex: none; cursor: pointer;
   background: linear-gradient(165deg, #fdf6e0, #e6d5a8 60%, #d3bd85);
   border: 3px solid #8a6d2f; color: #241a08; padding: 8px 9px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.55); transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -179,17 +234,17 @@ body { font-family: Georgia, 'Times New Roman', serif; color: #f2e8d5; }
   display: flex; align-items: center; justify-content: center; border: 2px solid #fff3;
 }
 .card .suit { position: absolute; top: 7px; right: 8px; font-size: 24px; line-height: 1; }
-.card .name { margin: 30px 0 0; font-size: 16px; font-weight: bold; text-align: center; line-height: 1.15; min-height: 36px; }
+.card .name { margin: 28px 0 0; font-size: 14px; font-weight: bold; text-align: center; line-height: 1.15; min-height: 18px; }
 .card .art {
-  height: 46px; margin-top: 4px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  height: 64px; margin-top: 4px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
   border: 2px solid rgba(255, 255, 255, 0.4); box-shadow: inset 0 -4px 10px rgba(0, 0, 0, 0.3), inset 0 2px 6px rgba(255, 255, 255, 0.25);
 }
-.card .art .art-glyph { font-size: 32px; line-height: 1; color: #fff; text-shadow: 0 3px 6px rgba(0, 0, 0, 0.55); }
-.card .effect { font-size: 12px; line-height: 1.25; text-align: center; margin-top: 4px; min-height: 30px; color: #3d2f12; }
-.card .value { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-size: 22px; font-weight: bold; }
-.card .type { position: absolute; left: 0; right: 0; bottom: 32px; text-align: center; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6b5726; }
-.card .key { position: absolute; top: 38px; left: 6px; font-size: 10px; color: #8a7a4a; }
-.card .synergy { position: absolute; top: 38px; right: 6px; font-size: 10px; font-weight: bold; color: #b3541e; }
+.card .art .art-glyph { font-size: 40px; line-height: 1; color: #fff; text-shadow: 0 3px 6px rgba(0, 0, 0, 0.55); }
+.card .effect { font-size: 12px; line-height: 1.25; text-align: center; margin-top: 4px; min-height: 28px; color: #3d2f12; }
+.card .value { position: absolute; left: 0; right: 0; bottom: 4px; text-align: center; font-size: 20px; font-weight: bold; }
+.card .type { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6b5726; }
+.card .key { position: absolute; top: 36px; left: 6px; font-size: 10px; color: #8a7a4a; }
+.card .synergy { position: absolute; top: 9px; right: 34px; font-size: 10px; font-weight: bold; color: #b3541e; }
 
 .suit-ember { color: #c73e1d; }
 .suit-tide { color: #1d6fb8; }
@@ -221,36 +276,49 @@ body { font-family: Georgia, 'Times New Roman', serif; color: #f2e8d5; }
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7); pointer-events: none; white-space: nowrap;
 }
 
-/* ---------- overlays ---------- */
+/* ---------- title overlay: transparent, compact panel docked high ---------- */
 .overlay {
-  position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
-  background: rgba(6, 9, 6, 0.72); backdrop-filter: blur(2px);
+  position: absolute; inset: 0; z-index: 10; display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 44px; background: transparent; pointer-events: none;
 }
+.overlay .panel { pointer-events: auto; }
 .panel {
-  background: linear-gradient(170deg, #1c2a1e, #101a12 70%); border: 3px solid #c9a227; border-radius: 18px;
-  padding: 28px 40px; text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); max-width: 760px;
+  background: linear-gradient(170deg, rgba(28, 42, 30, 0.94), rgba(16, 26, 18, 0.94)); border: 3px solid #c9a227; border-radius: 18px;
+  padding: 20px 28px; text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); max-width: 640px;
 }
-.game-title { font-size: 64px; font-weight: bold; letter-spacing: 8px; color: #f5c542; text-shadow: 0 3px 0 #5a3d1e, 0 0 30px rgba(245, 197, 66, 0.4); }
-.game-sub { font-size: 20px; color: #e8dcc0; margin-top: 2px; letter-spacing: 2px; }
-.suit-chips { display: flex; gap: 10px; justify-content: center; margin: 16px 0 2px; flex-wrap: wrap; }
+.game-title { font-size: 44px; font-weight: bold; letter-spacing: 6px; color: #f5c542; text-shadow: 0 3px 0 #5a3d1e, 0 0 30px rgba(245, 197, 66, 0.4); }
+.game-sub { font-size: 16px; color: #e8dcc0; margin-top: 2px; letter-spacing: 2px; }
+.suit-chips { display: flex; gap: 10px; justify-content: center; margin: 12px 0 2px; flex-wrap: wrap; }
 .chip { padding: 6px 16px; border-radius: 999px; font-size: 15px; font-weight: bold; border: 2px solid; letter-spacing: 0.5px; }
 .chip-ember { color: #ff8a5c; background: rgba(199, 62, 29, 0.22); border-color: #c73e1d; }
 .chip-tide { color: #7cc0ff; background: rgba(29, 111, 184, 0.22); border-color: #1d6fb8; }
 .chip-thorn { color: #8fdd7f; background: rgba(46, 125, 50, 0.25); border-color: #2e7d32; }
 .chip-gale { color: #ffd94d; background: rgba(184, 134, 11, 0.22); border-color: #b8860b; }
-.howto { text-align: left; font-size: 15px; line-height: 1.45; color: #ddd2b4; margin: 18px auto 6px; max-width: 640px; }
-.howto p { margin: 7px 0; }
+.howto { text-align: center; font-size: 15px; line-height: 1.45; color: #ddd2b4; margin: 10px auto 2px; max-width: 600px; }
+.howto p { margin: 4px 0; }
 .howto b { color: #ffd76a; }
 .big-btn {
   font-family: inherit; font-size: 22px; font-weight: bold; color: #1a1206; cursor: pointer;
   background: linear-gradient(180deg, #ffd76a, #e8a91c); border: 2px solid #fff3; border-radius: 12px;
-  padding: 14px 38px; margin-top: 16px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  padding: 14px 38px; margin-top: 12px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
 .big-btn:hover { filter: brightness(1.12); }
-.press-enter { font-size: 13px; color: #bfae87; margin-top: 10px; }
-.end-title { font-size: 58px; font-weight: bold; letter-spacing: 6px; }
+.press-enter { font-size: 13px; color: #bfae87; margin-top: 8px; }
+
+/* ---------- end banner: a ribbon across the top, board bright underneath ---------- */
+.end-banner {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+  text-align: center; padding: 16px 24px 12px;
+  border-bottom: 3px solid #c9a227; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
+}
+.end-banner.win { background: linear-gradient(180deg, rgba(94, 66, 4, 0.96), rgba(46, 32, 2, 0.96)); border-bottom-color: #ffd76a; }
+.end-banner.lose { background: linear-gradient(180deg, rgba(94, 16, 6, 0.96), rgba(44, 8, 3, 0.96)); border-bottom-color: #e85d3d; }
+.end-banner-inner { max-width: 900px; margin: 0 auto; }
+.end-title { font-size: 52px; font-weight: bold; letter-spacing: 6px; line-height: 1.05; }
 .end-title.win { color: #ffd76a; text-shadow: 0 0 30px rgba(255, 200, 60, 0.55); }
 .end-title.lose { color: #e85d3d; text-shadow: 0 0 30px rgba(232, 93, 61, 0.5); }
-.end-sub { font-size: 19px; color: #e8dcc0; margin-top: 6px; }
-.end-stats { display: flex; gap: 26px; justify-content: center; margin-top: 18px; font-size: 15px; color: #ddd2b4; }
+.end-sub { font-size: 19px; color: #e8dcc0; margin-top: 2px; }
+.end-stats { display: flex; gap: 26px; justify-content: center; margin-top: 8px; font-size: 20px; color: #ddd2b4; }
 .end-stats b { display: block; font-size: 26px; color: #ffd76a; }
+.end-banner .big-btn { font-size: 16px; padding: 8px 22px; margin-top: 8px; }
+.end-banner .press-enter { margin-top: 4px; }
